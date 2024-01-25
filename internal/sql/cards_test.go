@@ -56,7 +56,7 @@ func TestCreateCards(t *testing.T) {
 			wantErr: nil,
 		},
 		{
-			name: "error duplicate card",
+			name: "success upsert card",
 			payload: []models.Card{
 				{
 					Rank:  1,
@@ -65,7 +65,7 @@ func TestCreateCards(t *testing.T) {
 					Value: "A",
 				},
 			},
-			wantErr: msql.ErrInternal,
+			wantErr: nil,
 		},
 	}
 
