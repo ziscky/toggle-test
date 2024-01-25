@@ -12,6 +12,7 @@ import (
 
 // createDeckCards adds the array of deckCards to the database.
 func (p *Persist) createDeckCards(tx *gorm.DB, deckCards []models.DeckCard) error {
+	// inherints context from the provided transaction
 	return tx.Create(deckCards).Error
 }
 
