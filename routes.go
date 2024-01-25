@@ -15,7 +15,7 @@ func initRoutes(log *logrus.Entry, persist persist.PersistInterface) *mux.Router
 
 	router := mux.NewRouter()
 	router.HandleFunc("/deck", h.CreateDeck).Methods(http.MethodPost)
-	router.HandleFunc("/deck/open", h.OpenDeck).Methods(http.MethodGet)
+	router.HandleFunc("/deck", h.OpenDeck).Methods(http.MethodGet)
 	router.HandleFunc("/deck/draw", h.DrawCard).Methods(http.MethodPost)
 
 	return router

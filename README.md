@@ -18,6 +18,21 @@ go build
 #### Custom Options
 `ADDR=:8080 DB=/path/to/db ./toggle-test`
 
+## API 
+### Swagger file
+ `api.swagger.yaml`
+### Routes
+- Create shuffled deck with specific cards
+`POST /deck?cards=AS,2S,3D&shuffled=true`
+- Create default unshuffled deck
+`POST /deck`
+- Open deck
+`GET /deck?deck_id=a251071b-662f-44b6-ba11-e24863039c59`
+- Draw 3 cards from deck
+`POST /deck/draw?count=3&deck_id=a251071b-662f-44b6-ba11-e24863039c59`
+- Draw 1 card from deck
+`POST /deck/draw?deck_id=a251071b-662f-44b6-ba11-e24863039c59`
+
 ##  Tests
 Test coverage is provided in the file `cover.out`
 To run all tests and view coverage:

@@ -1,0 +1,147 @@
+openapi: 3.0.3
+info:
+  title: Toggle-Test
+  description: |-
+    These are the API requests and format for the toggl assignment.
+
+  contact:
+    email: emagembe@gmail.com
+  version: 1.0.0
+
+paths:
+  /deck:
+    post:
+      tags:
+        - Decks
+      summary: Create a new deck
+      description: Create a new deck
+      operationId: createDeck
+      parameters:
+        - name: cards
+          in: query
+          description: Specific cards to add to the deck
+          required: false
+          schema:
+            type: string
+        - name: shuffled
+          in: query
+          description: Shuffle the cards on deck
+          required: false
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateDeckResponse'          
+            
+        '400':
+          description: Invalid input
+        '500':
+          description: Internal server error
+    get:
+      tags:
+        - Decks
+      summary: Open Deck
+      description: Open Deck
+      operationId: openDeck
+      parameters:
+        - name: deck_id
+          in: query
+          description: The deck id to ppen
+          required: true
+          schema:
+            type: string
+       
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Deck'          
+          
+        '404':
+          description: Not found
+        '400':
+          description: Invalid input
+        '500':
+          description: Internal server error
+  /deck/draw:
+    post:
+      tags:
+        - Decks
+      summary: Draw a card(s) from the deck
+      description: Draw a card(s) from the deck
+      operationId: drawDeck
+      parameters:
+        - name: count
+          in: query
+          description: Number of cards to draw
+          required: false
+          schema:
+            type: integer
+            default: 1
+        - name: deck_id
+          in: query
+          description: The deck id to draw from
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CardArray'          
+        '404':
+          description: Not found
+        '400':
+          description: Invalid input
+        '500':
+          description: Internal server error
+ 
+components:
+  schemas:
+    CreateDeckResponse:
+      type: object
+      properties:
+        deck_id:
+          type: string
+        shuffled:
+          type: boolean
+        remaining:
+          type: integer
+          
+    CardArray:
+      type: array
+      items:
+        $ref: '#/components/schemas/Card'
+    Card:
+      type: object
+      properties:
+        code:
+          type: string
+          example: AS
+        value:
+          type: string
+          example: A
+        suit:
+          type: string
+          example: SPADES
+    Deck:
+      type: object
+      properties:
+        deck_id:
+          type: string
+        shuffled:
+          type: boolean
+        remaining:
+          type: integer
+        cards:
+          type: array
+          items:
+            $ref: '#/components/schemas/Card'
