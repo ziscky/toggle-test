@@ -28,6 +28,7 @@ type Persist struct {
 	orm *gorm.DB
 }
 
+// NewPersist returns a new Persist interface initialized with a gorm sqlite dialect
 func NewPersist(db *sql.DB) (*Persist, error) {
 	gormDB, err := gorm.Open(sqlite.Dialector{Conn: db})
 	if err != nil {
@@ -40,6 +41,7 @@ func NewPersist(db *sql.DB) (*Persist, error) {
 	}, nil
 }
 
+// Migrate runs migrations in the migrations/ directory using goose.
 func (p *Persist) Migrate(ctx context.Context, log *logrus.Entry) error {
 	goose.SetLogger(log)
 	goose.SetBaseFS(embedMigrations)

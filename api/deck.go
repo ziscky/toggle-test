@@ -16,11 +16,13 @@ import (
 	msql "github.com/ziscky/toggle-test/internal/sql"
 )
 
+// RequestHandler is a struct containing all the API request handlers.
 type RequestHandler struct {
 	persist persist.PersistInterface
 	log     *logrus.Entry
 }
 
+// NewRequestHandler returns a new instance of RequestHandler
 func NewRequestHandler(log *logrus.Entry, persist persist.PersistInterface) *RequestHandler {
 	return &RequestHandler{
 		persist: persist,
@@ -28,6 +30,9 @@ func NewRequestHandler(log *logrus.Entry, persist persist.PersistInterface) *Req
 	}
 }
 
+// CreateDeck receives two optional query params: 'cards' (comma separated string ) and 'shuffled'.
+// Adds the specified cards or the full deck to the database either in default order or after shuffling.
+// Returns a CreateDeckResponse to the client.
 func (h *RequestHandler) CreateDeck(rw http.ResponseWriter, r *http.Request) {
 	var (
 		err         error
@@ -84,6 +89,8 @@ func (h *RequestHandler) CreateDeck(rw http.ResponseWriter, r *http.Request) {
 	writeResponseBytes(rw, http.StatusOK, payload)
 }
 
+// OpenDeck receives a mandatory 'deck_id' query param and returns an OpenDeckResponse containing
+// all cards remaining in the deck.
 func (h *RequestHandler) OpenDeck(rw http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
@@ -120,6 +127,8 @@ func (h *RequestHandler) OpenDeck(rw http.ResponseWriter, r *http.Request) {
 	writeResponseBytes(rw, http.StatusOK, payload)
 }
 
+// DrawCard receives a mandatory 'deck_id' and optional 'count' query param and returns a DrawCardResponse
+// containing the cards drawn from the deck. If 'count' is ommited it is default = 1.
 func (h *RequestHandler) DrawCard(rw http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 

@@ -22,6 +22,8 @@ type Server struct {
 	log *logrus.Entry
 }
 
+// NewServer connects to the database using the provided options, performs migrations, initializes API routes
+// and initializes game requirements
 func NewServer(log *logrus.Entry, options *options) (*Server, error) {
 	db, err := connectDB(options.dbFilePath)
 	if err != nil {
@@ -58,11 +60,13 @@ func NewServer(log *logrus.Entry, options *options) (*Server, error) {
 	}, nil
 }
 
+// Start listens for connections on the address provided in the options when initializing a new Server instance.
 func (s *Server) Start() error {
 	s.log.Infof("starting server on %s", s.srv.Addr)
 	return s.srv.ListenAndServe()
 }
 
+// Stop will shutdown the http server and close the database connection
 func (s *Server) Stop() error {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
@@ -74,6 +78,7 @@ func (s *Server) Stop() error {
 	return s.db.Close()
 }
 
+// connectDB connects to an sqlite database with the provided path and enables foreign key constraints.
 func connectDB(dbFilePath string) (*sql.DB, error) {
 	db, err := sql.Open("sqlite", fmt.Sprintf("%s?_pragma=foreign_keys(1)", dbFilePath))
 	if err != nil {

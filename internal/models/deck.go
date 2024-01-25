@@ -6,6 +6,7 @@ import (
 	"github.com/google/uuid"
 )
 
+// Deck represents the Deck table in the database.
 type Deck struct {
 	ID        uuid.UUID `gorm:"type:uuid"`
 	Shuffled  bool

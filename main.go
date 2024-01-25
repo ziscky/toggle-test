@@ -31,6 +31,7 @@ func main() {
 		if err := srv.Start(); err != nil {
 			if !errors.Is(err, http.ErrServerClosed) {
 				log.Errorf("failed to start server: %s", err)
+				// if srv.Start failed, terminate main thread as well
 				done <- syscall.SIGTERM
 			}
 		}

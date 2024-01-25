@@ -10,10 +10,12 @@ import (
 	"github.com/ziscky/toggle-test/internal/models"
 )
 
+// createDeckCards adds the array of deckCards to the database.
 func (p *Persist) createDeckCards(tx *gorm.DB, deckCards []models.DeckCard) error {
 	return tx.Create(deckCards).Error
 }
 
+// UpdateDeckCardStatus will update the cards provided in the deckID provided to the status provided.
 func (p *Persist) UpdateDeckCardStatus(ctx context.Context, deckID uuid.UUID, cards []models.Card, status models.CardStatus) error {
 	codes := make([]string, len(cards))
 	for _, card := range cards {

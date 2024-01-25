@@ -7,6 +7,8 @@ import (
 	"github.com/ziscky/toggle-test/internal/persist"
 )
 
+// InitializeGameRequirements generates game requirements when the server is started.
+// Generates french playing cards and adds them to the db.
 func InitializeGameRequirements(ctx context.Context, persist persist.PersistInterface) error {
 	playingCards, err := generatePlayingCards(ctx, FrenchPlayingCards)
 	if err != nil {

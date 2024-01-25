@@ -8,6 +8,7 @@ import (
 	"github.com/ziscky/toggle-test/internal/models"
 )
 
+// PersistInterface defines methods required to implement the required database operations.
 type PersistInterface interface {
 	CreateCards(ctx context.Context, cards []models.Card) error
 	GetCards(ctx context.Context, codes []string) ([]models.Card, error)

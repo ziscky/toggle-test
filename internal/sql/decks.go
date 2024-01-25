@@ -13,6 +13,8 @@ import (
 	"github.com/ziscky/toggle-test/internal/models"
 )
 
+// GetDeckByID returns a populated Deck model from the database by ID.
+// The Deck.Cards array is ordered by DeckCard.Position.
 func (p *Persist) GetDeckByID(ctx context.Context, id uuid.UUID) (*models.Deck, error) {
 	var deck models.Deck
 	err := p.orm.Debug().WithContext(ctx).Transaction(func(tx *gorm.DB) error {
@@ -38,6 +40,7 @@ func (p *Persist) GetDeckByID(ctx context.Context, id uuid.UUID) (*models.Deck, 
 				return fmt.Errorf("%w: %w", ErrInternal, err)
 			}
 
+			// if deck.ID is already set, skip parsing UUID again
 			if deck.ID == (uuid.UUID{}) {
 				deck.ID, err = uuid.Parse(deckIDStr)
 				if err != nil {
@@ -45,6 +48,7 @@ func (p *Persist) GetDeckByID(ctx context.Context, id uuid.UUID) (*models.Deck, 
 				}
 			}
 
+			// the remaining cards on deck are identified by the status: models.CardStatusOnDeck
 			if status == models.CardStatusOnDeck {
 				deck.Remaining++
 			}
@@ -61,6 +65,7 @@ func (p *Persist) GetDeckByID(ctx context.Context, id uuid.UUID) (*models.Deck, 
 	return &deck, nil
 }
 
+// CreateDeck adds the deck to the database and also fills in the intermediary table: deck_cards.
 func (p *Persist) CreateDeck(ctx context.Context, shuffled bool, cards []models.Card) (*models.Deck, error) {
 	deckID := uuid.New()
 	var deckCards []models.DeckCard

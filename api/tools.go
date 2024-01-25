@@ -14,7 +14,9 @@ func writeResponseString(rw http.ResponseWriter, statusCode int, payload string)
 }
 
 func writeResponseBytes(rw http.ResponseWriter, statusCode int, payload []byte) {
-	rw.Header().Add("content-type", "application/json")
+	if statusCode == http.StatusOK {
+		rw.Header().Add("content-type", "application/json")
+	}
 	rw.WriteHeader(statusCode)
 	rw.Write(payload)
 }
