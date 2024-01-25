@@ -2,7 +2,7 @@
 
 ## Building
 ```
-git clone github.com/ziscky/toggle-test
+git clone https://github.com/ziscky/toggle-test.git
 go build
 ```
 
