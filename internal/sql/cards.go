@@ -2,10 +2,8 @@ package sql
 
 import (
 	"context"
-	"errors"
 	"fmt"
 
-	"github.com/glebarez/go-sqlite"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 
@@ -23,12 +21,6 @@ func (p *Persist) CreateCards(ctx context.Context, cards []models.Card) error {
 		}).Create(cards).Error
 	})
 	if err != nil {
-		var sqliteErr *sqlite.Error
-		if errors.As(err, &sqliteErr) {
-			if sqliteErr.Code() == sqliteForeignKeyViolationCode {
-				return ErrForeignKeyViolation
-			}
-		}
 		return fmt.Errorf("%w: %w", ErrInternal, err)
 	}
 	return nil
