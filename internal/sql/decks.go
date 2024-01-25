@@ -17,7 +17,7 @@ import (
 // The Deck.Cards array is ordered by DeckCard.Position.
 func (p *Persist) GetDeckByID(ctx context.Context, id uuid.UUID) (*models.Deck, error) {
 	var deck models.Deck
-	err := p.orm.Debug().WithContext(ctx).Transaction(func(tx *gorm.DB) error {
+	err := p.orm.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
 		rows, err := tx.Model(&models.Deck{}).
 			Select("decks.id, decks.shuffled, cards.rank, cards.code, cards.suit, cards.value, deck_cards.status").
 			Joins("left join deck_cards on deck_cards.deck_id = decks.id").
@@ -60,7 +60,10 @@ func (p *Persist) GetDeckByID(ctx context.Context, id uuid.UUID) (*models.Deck, 
 		return nil, err
 	}
 	if deck.ID == (uuid.UUID{}) {
-		return nil, ErrNotFound
+		// if the deck exists but there are no more cards 'ON-DECK', we return the empty deck instead of an error.
+		if err := p.orm.WithContext(ctx).First(&deck, id).Error; err != nil {
+			return nil, ErrNotFound
+		}
 	}
 	return &deck, nil
 }
