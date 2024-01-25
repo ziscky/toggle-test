@@ -97,19 +97,19 @@ func TestGetCards(t *testing.T) {
 					Value: "A",
 				},
 				{
-					Rank:  2,
+					Rank:  15,
 					Code:  "2D",
 					Suit:  "DIAMONDS",
 					Value: "2",
 				},
 				{
-					Rank:  11,
+					Rank:  37,
 					Code:  "JC",
 					Suit:  "CLUBS",
 					Value: "JACK",
 				},
 				{
-					Rank:  12,
+					Rank:  51,
 					Code:  "QH",
 					Suit:  "HEARTS",
 					Value: "QUEEN",
