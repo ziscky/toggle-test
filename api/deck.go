@@ -161,6 +161,11 @@ func (h *RequestHandler) DrawCard(rw http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if count > len(deck.Cards) {
+		writeResponseString(rw, http.StatusBadRequest, "deck does not have enough cards")
+		return
+	}
+
 	drawn := deck.Cards[:count]
 
 	if err := h.persist.UpdateDeckCardStatus(ctx, deckID, drawn, models.CardStatusInHand); err != nil {

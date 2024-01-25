@@ -30,7 +30,7 @@ func (p *Persist) CreateCards(ctx context.Context, cards []models.Card) error {
 // Results are ordered by 'rank' ASC
 func (p *Persist) GetCards(ctx context.Context, codes []string) ([]models.Card, error) {
 	var cards []models.Card
-	q := p.orm.Model(&models.Card{})
+	q := p.orm.WithContext(ctx).Model(&models.Card{})
 	if len(codes) > 0 {
 		q = q.Where("code in (?)", codes)
 	}
